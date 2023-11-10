@@ -4,11 +4,24 @@
 #SHELLY_IPS=("192.168.89.231" "192.168.89.227")
 SHELLY_IPS=("192.168.88.50" "192.168.88.51")
 
+declare -A outputAssignments
+outputAssignments[dut1]=0
+outputAssignments[dut2]=1
+outputAssignments[dut3]=2
+outputAssignments[builder]=6
+outputAssignments[power]=7
+
+if [ ${outputAssignments[$2]+_} ]; then
+	channel_raw=${outputAssignments[$2]}
+	echo "output $2 found, mapping to $channel_raw"
+else
+	channel_raw="$2"
+fi
+
 CHANNELS_PER_SHELLY=4
 MAX_CHANNEL=$((${#SHELLY_IPS[@]} * CHANNELS_PER_SHELLY - 1))
 
 cmd="help"
-channel_raw="$2"
 channel=""
 shelly=""
 power=""
