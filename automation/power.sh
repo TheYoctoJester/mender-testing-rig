@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 
 SHELLY_IPS=("192.168.89.231" "192.168.89.227")
