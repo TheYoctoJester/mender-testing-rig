@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-
-#SHELLY_IPS=("192.168.89.231" "192.168.89.227")
-SHELLY_IPS=("192.168.88.50" "192.168.88.51")
+SHELLY_IPS=("192.168.89.51" "192.168.89.50")
 
 declare -A outputAssignments
 outputAssignments[dut1]=0
