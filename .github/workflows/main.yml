@@ -1,0 +1,23 @@
+name: 'main' 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test_image:
+    runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
+    steps:
+      - name: clean up
+        run: rm -fR $BUILDDIR
+
+      - uses: actions/checkout@v4
+
+      - name: run 32bit test
+        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-20241104160415.sdimg
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-raspberrypi4.txt
+          path: run.txt
