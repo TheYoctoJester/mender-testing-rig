@@ -78,6 +78,9 @@ power_off() {
 
 check_arguments $MAYBE_IMAGE
 
+# clean up eventual leftovers
+rm -fR output* || true
+
 # be certain
 power_off
 set_host
@@ -93,8 +96,17 @@ power_on
 stty -F /dev/ttyUSB0 115200
 timeout 10m cat /dev/ttyUSB0 | tee run.txt
 
+# done
 power_off
 set_host
+
+# collect stuff
+mv run.txt output
+sudo mount $STORAGE-part4 data
+cp data/mender-validation-state.json output
+cp data/validation.log output
+sudo umount data
+tar cvjf output.tar.bz2 output
 
 exit 0
 

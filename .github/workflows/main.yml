@@ -13,6 +13,9 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: create mountpoint
+        run: mkdir data
+
       - name: run 32bit test
         run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-20241104160415.sdimg
 
