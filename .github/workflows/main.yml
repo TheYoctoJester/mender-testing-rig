@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  test_image:
+  test_image_rpi4:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
     steps:
       - name: clean up
@@ -22,5 +22,25 @@ jobs:
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: run-raspberrypi4.txt
-          path: run.txt
+          name: raspberrypi4.tar.bz2
+          path: output.tar.bz2
+
+  test_image_rpi4-64:
+    runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
+    steps:
+      - name: clean up
+        run: rm -fR $BUILDDIR
+
+      - uses: actions/checkout@v4
+
+      - name: create mountpoint
+        run: mkdir data
+
+      - name: run 64bit test
+        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-64-20241104155953.sdim
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: raspberrypi4-64.tar.bz2
+          path: output.tar.bz2
