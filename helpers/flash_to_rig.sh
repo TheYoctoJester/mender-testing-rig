@@ -91,7 +91,7 @@ power_on
 
 # set serial port 
 stty -F /dev/ttyUSB0 115200
-timeout 10m cat /dev/ttyUSB0 > run.txt
+timeout 10m cat /dev/ttyUSB0 | tee run.txt
 
 power_off
 set_host
