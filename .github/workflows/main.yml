@@ -37,7 +37,7 @@ jobs:
         run: mkdir data
 
       - name: run 64bit test
-        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-64-20241104155953.sdim
+        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-64-20241104155953.sdimg
 
       - name: upload
         uses: actions/upload-artifact@v4
