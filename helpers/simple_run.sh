@@ -16,8 +16,9 @@ set_dut
 power_on
 
 # set serial port 
-stty -F /dev/ttyUSB0 115200
-timeout 10m cat /dev/ttyUSB0 | tee run.txt
+#stty -F /dev/ttyUSB0 115200
+#timeout 10m cat /dev/ttyUSB0 | tee run.txt
+sleep 6000
 
 # done
 power_off
