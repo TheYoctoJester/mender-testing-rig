@@ -34,6 +34,9 @@ jobs:
         with:
           name: raspberrypi4.tar.bz2
           path: output.tar.bz2
+      
+      - name: show log
+        run: cat data/validation.log
 
   test_image_rpi4-64:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
@@ -63,3 +66,6 @@ jobs:
         with:
           name: raspberrypi4-64.tar.bz2
           path: output.tar.bz2
+      
+      - name: show log
+        run: cat data/validation.log

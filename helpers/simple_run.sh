@@ -15,9 +15,8 @@ setup_rig
 set_dut
 power_on
 
-# set serial port 
-stty -F /dev/ttyUSB0 115200
-timeout 10m cat /dev/ttyUSB0 | tee run.txt
+# wait 10 minutes
+sleep 600
 
 # done
 power_off
