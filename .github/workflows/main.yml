@@ -17,7 +17,7 @@ jobs:
         run: mkdir data
 
       - name: run 32bit test
-        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-20241104160415.sdimg
+        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4/images/core-image-minimal-raspberrypi4.sdimg
 
       - name: upload
         uses: actions/upload-artifact@v4
@@ -37,7 +37,7 @@ jobs:
         run: mkdir data
 
       - name: run 64bit test
-        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/for_test/core-image-minimal-raspberrypi4-64-20241104155953.sdimg
+        run: ./helpers/flash_to_rig.sh /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4-64/images/core-image-minimal-raspberrypi4-64.sdimg
 
       - name: upload
         uses: actions/upload-artifact@v4
