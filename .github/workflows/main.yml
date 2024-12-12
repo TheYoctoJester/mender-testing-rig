@@ -6,8 +6,17 @@ on:
       - main
 
 jobs:
+  power_on:
+    runs-on: [self-hosted, linux, x64, builder]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: power on runner
+        run: ./automation/power.sh on 0 # channel 0 is dut runner 1
+
   test_image_rpi4:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
+    needs: power_on
     steps:
       - uses: actions/checkout@v4
 
@@ -37,6 +46,7 @@ jobs:
 
   test_image_rpi4-64:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
+    needs: power_on
     steps:
       - uses: actions/checkout@v4
 
@@ -63,3 +73,13 @@ jobs:
       
       - name: show log
         run: cat output/validation.log
+
+  power_off:
+    runs-on: [self-hosted, linux, x64, builder]
+    needs: [test_image_rpi4, test_image_rpi4-64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: power off runner
+        run: ./automation/power.sh on 0 # channel 0 is dut runner 1
+      
