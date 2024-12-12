@@ -9,9 +9,6 @@ jobs:
   test_image_rpi4:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
     steps:
-      - name: clean up
-        run: rm -fR $BUILDDIR
-
       - uses: actions/checkout@v4
 
       - name: create mountpoint
@@ -41,9 +38,6 @@ jobs:
   test_image_rpi4-64:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
     steps:
-      - name: clean up
-        run: rm -fR $BUILDDIR
-
       - uses: actions/checkout@v4
 
       - name: create mountpoint
