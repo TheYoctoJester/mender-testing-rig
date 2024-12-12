@@ -17,13 +17,17 @@ jobs:
       - name: create mountpoint
         run: mkdir data
 
-      - name: test 32bit image
+      - name: prepare 32bit image
         run: >
           ./helpers/control_rig.sh power_off &&
           ./helpers/control_rig.sh sdmux_host &&
-          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4/images/core-image-minimal-raspberrypi4.sdimg &&
-          ./helpers/simple_run.sh &&
-          ./helpers/gather_validation_artifacts.sh
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4/images/core-image-minimal-raspberrypi4.sdimg
+    
+      - name: test 32bit image
+        run: ./helpers/simple_run.sh
+
+      - name: collect artifacts
+        run: ./helpers/gather_validation_artifacts.sh
 
       - name: upload
         uses: actions/upload-artifact@v4
@@ -42,13 +46,17 @@ jobs:
       - name: create mountpoint
         run: mkdir data
 
-      - name: run 64bit test
+      - name: prepare 64bit image
         run: >
           ./helpers/control_rig.sh power_off &&
           ./helpers/control_rig.sh sdmux_host &&
-          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4-64/images/core-image-minimal-raspberrypi4-64.sdimg &&
-          ./helpers/simple_run.sh &&
-          ./helpers/gather_validation_artifacts.sh
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4-64/images/core-image-minimal-raspberrypi4-64.sdimg
+    
+      - name: test 64bit image
+        run: ./helpers/simple_run.sh
+
+      - name: collect artifacts
+        run: ./helpers/gather_validation_artifacts.sh
 
       - name: upload
         uses: actions/upload-artifact@v4
