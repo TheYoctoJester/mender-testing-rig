@@ -41,7 +41,12 @@ case $1 in
     ;;
 
   flash)
-	dd if=$IMAGE of=$STORAGE status=progress bs=1M conv=fsync
+	if [ ! -z "$2" ]; then
+		dd if=$2 of=$STORAGE status=progress bs=1M conv=fsync
+	else
+		echo "no image to flash given, aborting."
+		exit 1
+	fi
     ;;
 
   help | *)
