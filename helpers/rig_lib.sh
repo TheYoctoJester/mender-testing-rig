@@ -10,10 +10,20 @@ setup_rig() {
 		fi
 	fi
 
+	# test for usb-sd-mux classic
 	if [ -z "$STORAGE" ]; then
 		COUNT_STORAGE=$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdmux_* | grep -v '\-part.*$' | wc -l)
 		if [ "$COUNT_STORAGE" -eq "1" ]; then
 			STORAGE="$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdmux_* | grep -v '\-part.*$')"
+			#echo "only one SD mux storage connected, defaulting to it: $STORAGE"
+		fi
+	fi
+	
+	# test for usb-sd-mux fast
+	if [ -z "$STORAGE" ]; then
+		COUNT_STORAGE=$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdFST_* | grep -v '\-part.*$' | wc -l)
+		if [ "$COUNT_STORAGE" -eq "1" ]; then
+			STORAGE="$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdFST_* | grep -v '\-part.*$')"
 			#echo "only one SD mux storage connected, defaulting to it: $STORAGE"
 		fi
 	fi

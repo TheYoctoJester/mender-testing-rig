@@ -93,5 +93,5 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: power off runner
-        run: ./automation/power.sh on 1 # channel 0 is dut runner 2
+        run: ./automation/power.sh off 1 # channel 1 is dut runner 2
       

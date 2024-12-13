@@ -12,7 +12,7 @@ source $SCRIPT_DIRECTORY/rig_lib.sh
 setup_rig
 
 # collect stuff
-mv run.txt output
+mkdir output
 sudo mount $STORAGE-part4 data
 cp data/mender-validation-state.json output
 cp data/validation.log output
