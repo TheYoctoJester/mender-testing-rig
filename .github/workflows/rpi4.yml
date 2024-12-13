@@ -84,14 +84,6 @@ jobs:
     needs: [test_image_rpi4, test_image_rpi4-64]
     steps:
       - name: shutdown runner
-        run: sudo poweroff
-            
-  power_off:
-    runs-on: [self-hosted, linux, x64, builder]
-    needs: shutdown
-    steps:
-      - uses: actions/checkout@v4
+        run: sudo shutdown -h +2
 
-      - name: power off runner
-        run: ./automation/power.sh off 0 # channel 0 is dut runner 1
       
