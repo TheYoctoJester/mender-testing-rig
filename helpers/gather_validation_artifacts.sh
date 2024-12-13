@@ -18,5 +18,7 @@ cp data/mender-validation-state.json output
 cp data/validation.log output
 sudo umount data
 tar cvjf output.tar.bz2 output
+ls -alh .
+ls -alh output
 
 exit 0
