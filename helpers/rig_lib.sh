@@ -2,29 +2,31 @@ setup_rig() {
 	if [ -z "$MUX" ]; then
 		MUX_DIR="/dev/usb-sd-mux"
 		COUNT_MUXES=$(ls -1 /dev/usb-sd-mux/ | wc -l)
-		#echo "found $COUNT_MUXES usb-sd-muxes"
+		echo "found $COUNT_MUXES usb-sd-muxes"
 
 		if [ "$COUNT_MUXES" -eq "1" ]; then
 			MUX="$MUX_DIR/$(ls -1 $MUX_DIR)"
-			#echo "only one MUX connected, defaulting to it: $MUX"
+			echo "only one MUX connected, defaulting to it: $MUX"
 		fi
 	fi
 
 	# test for usb-sd-mux classic
 	if [ -z "$STORAGE" ]; then
-		COUNT_STORAGE=$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdmux_* | grep -v '\-part.*$' | wc -l)
-		if [ "$COUNT_STORAGE" -eq "1" ]; then
+		COUNT_STORAGE_CLASSIC=$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdmux_* | grep -v '\-part.*$' | wc -l)
+		echo "found $COUNT_STORAGE_CLASSIC usb-sd-mux classic"
+		if [ "$COUNT_STORAGE_CLASSIC" -eq "1" ]; then
 			STORAGE="$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdmux_* | grep -v '\-part.*$')"
-			#echo "only one SD mux storage connected, defaulting to it: $STORAGE"
+			echo "one SD mux classic storage connected, defaulting to it: $STORAGE"
 		fi
 	fi
 	
 	# test for usb-sd-mux fast
 	if [ -z "$STORAGE" ]; then
-		COUNT_STORAGE=$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdFST_* | grep -v '\-part.*$' | wc -l)
-		if [ "$COUNT_STORAGE" -eq "1" ]; then
+		COUNT_STORAGE_FAST=$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdFST_* | grep -v '\-part.*$' | wc -l)
+		echo "found $COUNT_STORAGE_FAST usb-sd-mux classic"
+		if [ "$COUNT_STORAGE_FAST" -eq "1" ]; then
 			STORAGE="$(ls -1 /dev/disk/by-id/usb-LinuxAut_sdFST_* | grep -v '\-part.*$')"
-			#echo "only one SD mux storage connected, defaulting to it: $STORAGE"
+			echo "one SD mux fast storage connected, defaulting to it: $STORAGE"
 		fi
 	fi
 
