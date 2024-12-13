@@ -74,9 +74,16 @@ jobs:
       - name: show log
         run: cat output/validation.log
 
+  shutdown:
+    runs-on: [self-hosted, linux, x64, dut, raspberrypi4]
+    needs: [test_image_rpi4, test_image_rpi4-64]
+    steps:
+      - name: shutdown runner
+        run: sudo poweroff
+            
   power_off:
     runs-on: [self-hosted, linux, x64, builder]
-    needs: [test_image_rpi4, test_image_rpi4-64]
+    needs: shutdown
     steps:
       - uses: actions/checkout@v4
 
