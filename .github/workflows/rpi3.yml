@@ -11,8 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: power on runner
-        run: ./automation/power.sh on 1 # channel 0 is dut runner 2
+      - name: power on runner # channel 1 is dut runner 2, force power cycle
+        run: >
+          ./automation/power.sh off 1 &&
+          sleep 3 &&
+          ./automation/power.sh on 1
 
   test_image_rpi3:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi3]
