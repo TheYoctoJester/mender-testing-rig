@@ -1,0 +1,94 @@
+name: 'main' 
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  power_on:
+    runs-on: [self-hosted, linux, x64, builder]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: power on runner
+        run: ./automation/power.sh on 1 # channel 0 is dut runner 2
+
+  test_image_rpi3:
+    runs-on: [self-hosted, linux, x64, dut, raspberrypi3]
+    needs: power_on
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: create mountpoint
+        run: mkdir data
+
+      - name: prepare 32bit image
+        run: >
+          ./helpers/control_rig.sh power_off &&
+          ./helpers/control_rig.sh sdmux_host &&
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi3/images/core-image-minimal-raspberrypi3.sdimg
+    
+      - name: test 32bit image
+        run: ./helpers/simple_run.sh
+
+      - name: collect artifacts
+        run: ./helpers/gather_validation_artifacts.sh
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: raspberrypi4.tar.bz2
+          path: output.tar.bz2
+      
+      - name: show log
+        run: cat output/validation.log
+
+  test_image_rpi3-64:
+    runs-on: [self-hosted, linux, x64, dut, raspberrypi3]
+    needs: power_on
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: create mountpoint
+        run: mkdir data
+
+      - name: prepare 64bit image
+        run: >
+          ./helpers/control_rig.sh power_off &&
+          ./helpers/control_rig.sh sdmux_host &&
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi3-64/images/core-image-minimal-raspberrypi3-64.sdimg
+    
+      - name: test 64bit image
+        run: ./helpers/simple_run.sh
+
+      - name: collect artifacts
+        run: ./helpers/gather_validation_artifacts.sh
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: raspberrypi4-64.tar.bz2
+          path: output.tar.bz2
+      
+      - name: show log
+        run: cat output/validation.log
+
+  shutdown:
+    runs-on: [self-hosted, linux, x64, dut, raspberrypi3]
+    needs: [test_image_rpi3, test_image_rpi3-64]
+    steps:
+      - name: shutdown runner
+        run: sudo poweroff
+            
+  power_off:
+    runs-on: [self-hosted, linux, x64, builder]
+    needs: shutdown
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: power off runner
+        run: ./automation/power.sh on 1 # channel 0 is dut runner 2
+      
