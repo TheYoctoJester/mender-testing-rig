@@ -1,0 +1,87 @@
+name: 'bbb' 
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  power_on:
+    runs-on: [self-hosted, linux, x64, builder]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: power on runner # channel 2 is dut runner 3, force power cycle
+        run: >
+          ./automation/power.sh off 2 &&
+          sleep 3 &&
+          ./automation/power.sh on 2
+
+  test_image_bbb:
+    runs-on: [self-hosted, linux, x64, dut, beagleboneblack]
+    needs: power_on
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: create mountpoint
+        run: mkdir data
+
+      - name: prepare grub image
+        run: >
+          ./helpers/control_rig.sh power_off &&
+          ./helpers/control_rig.sh sdmux_host &&
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/beaglebone/images/core-image-minimal-beaglebone-yocto-grub.sdimg
+    
+      - name: test grub image
+        run: ./helpers/simple_run.sh
+
+      - name: collect artifacts
+        run: ./helpers/gather_validation_artifacts.sh
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbb.tar.bz2
+          path: output.tar.bz2
+      
+      - name: show log
+        run: cat output/validation.log
+
+  test_image_bbb-uboot:
+    runs-on: [self-hosted, linux, x64, dut, beagleboneblack]
+    needs: power_on
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: create mountpoint
+        run: mkdir data
+
+      - name: prepare uboot image
+        run: >
+          ./helpers/control_rig.sh power_off &&
+          ./helpers/control_rig.sh sdmux_host &&
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/beaglebone-uboot/images/core-image-minimal-beaglebone-yocto.sdimg
+    
+      - name: test uboot image
+        run: ./helpers/simple_run.sh
+
+      - name: collect artifacts
+        run: ./helpers/gather_validation_artifacts.sh
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: bbb-ubootuboot.tar.bz2
+          path: output.tar.bz2
+      
+      - name: show log
+        run: cat output/validation.log
+
+  shutdown:
+    runs-on: [self-hosted, linux, x64, dut, beagleboneblack]
+    needs: [test_image_bbb, test_image_bbb-uboot]
+    steps:
+      - name: shutdown runner
+        run: sudo shutdown -h +2
