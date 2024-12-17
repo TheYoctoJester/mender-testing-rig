@@ -111,3 +111,14 @@ jobs:
     steps:
       - name: shutdown runner
         run: sudo shutdown -h +2
+
+  power_off:
+    runs-on: [self-hosted, linux, x64, builder]
+    needs: [shutdown]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: wait a bit for runner to shut down
+        run: sleep 300
+      - name: power off runner
+        run: ./automation/power.sh off 2
