@@ -48,6 +48,19 @@ jobs:
       - name: show log
         run: cat output/validation.log
 
+      - name: check result
+        run: >
+          if grep -q "BOOTLOADER VALIDATION: SUCCESS" output/validation.log; then \
+            echo "success"; \
+            exit 0; \ 
+          elif grep "BOOTLOADER VALIDATION: FAILURE" output/validation.log; then \
+            echo "failure"; \
+            exit 1; \
+          else
+            echo "failure - no evaluation"; \
+            exit 1;
+          fi
+
   test_image_rpi3-64:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi3]
     needs: power_on
@@ -78,6 +91,19 @@ jobs:
       
       - name: show log
         run: cat output/validation.log
+
+      - name: check result
+        run: >
+          if grep -q "BOOTLOADER VALIDATION: SUCCESS" output/validation.log; then \
+            echo "success"; \
+            exit 0; \ 
+          elif grep "BOOTLOADER VALIDATION: FAILURE" output/validation.log; then \
+            echo "failure"; \
+            exit 1; \
+          else
+            echo "failure - no evaluation"; \
+            exit 1;
+          fi
 
   shutdown:
     runs-on: [self-hosted, linux, x64, dut, raspberrypi3]
