@@ -21,6 +21,8 @@ jobs:
     runs-on: [self-hosted, linux, x64, dut, beagleboneblack]
     needs: power_on
     continue-on-error: true
+    outputs:
+      result: ${{ steps.prepare_result.outputs.result }}
     steps:
       - uses: actions/checkout@v4
 
@@ -48,23 +50,22 @@ jobs:
       - name: show log
         run: cat output/validation.log
 
-      - name: check result
+      - name: prepare_result
         run: >
           if grep -q "BOOTLOADER VALIDATION: SUCCESS" output/validation.log; then \
-            echo "success"; \
-            exit 0; \ 
+            echo "result=success" >> $GITHUB_OUTPUT
           elif grep "BOOTLOADER VALIDATION: FAILURE" output/validation.log; then \
-            echo "failure"; \
-            exit 1; \
+            echo "result=failure" >> $GITHUB_OUTPUT
           else
-            echo "failure - no evaluation"; \
-            exit 1;
+            echo "result=failure - no evaluation" >> $GITHUB_OUTPUT
           fi
 
   test_image_bbb-uboot:
     runs-on: [self-hosted, linux, x64, dut, beagleboneblack]
     needs: power_on
     continue-on-error: true
+    outputs:
+      result: ${{ steps.prepare_result.outputs.result }}
     steps:
       - uses: actions/checkout@v4
 
@@ -92,17 +93,14 @@ jobs:
       - name: show log
         run: cat output/validation.log
 
-      - name: check result
+      - name: prepare_result
         run: >
           if grep -q "BOOTLOADER VALIDATION: SUCCESS" output/validation.log; then \
-            echo "success"; \
-            exit 0; \ 
+            echo "result=success" >> $GITHUB_OUTPUT
           elif grep "BOOTLOADER VALIDATION: FAILURE" output/validation.log; then \
-            echo "failure"; \
-            exit 1; \
+            echo "result=failure" >> $GITHUB_OUTPUT
           else
-            echo "failure - no evaluation"; \
-            exit 1;
+            echo "result=failure - no evaluation" >> $GITHUB_OUTPUT
           fi
 
   shutdown:
@@ -122,3 +120,19 @@ jobs:
         run: sleep 300
       - name: power off runner
         run: ./automation/power.sh off 2
+
+  # this runs last!
+  evaluate:
+    needs: [test_image_bbb, test_image_bbb-uboot, power_off]
+    runs-on: ubuntu-latest
+    steps:
+      - name: collect artifacts
+        env:
+          RESULT_1: ${{ needs.test_image_bbb.outputs.result }}
+          RESULT_2: ${{ needs.test_image_bbb-uboot.outputs.result }}
+        run: >
+          echo "RESULT_1 (test_image_bbb) = $RESULT_1";
+          echo "RESULT_2 (test_image_bbb-uboot)= $RESULT_2";
+          if [ "$RESULT_1" != "success" ] || [ "$RESULT_2" != "success" ]; then
+            exit 1
+          fi
