@@ -33,7 +33,7 @@ jobs:
         run: >
           ./helpers/control_rig.sh power_off &&
           ./helpers/control_rig.sh sdmux_host &&
-          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/beaglebone/images/core-image-minimal-beaglebone-yocto-grub.sdimg
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/beaglebone/images/mender-validation-image-beaglebone-yocto-grub.sdimg
     
       - name: test grub image
         run: ./helpers/simple_run.sh
@@ -76,7 +76,7 @@ jobs:
         run: >
           ./helpers/control_rig.sh power_off &&
           ./helpers/control_rig.sh sdmux_host &&
-          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/beaglebone-uboot/images/core-image-minimal-beaglebone-yocto.sdimg
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/beaglebone-uboot/images/mender-validation-image-beaglebone-yocto.sdimg
     
       - name: test uboot image
         run: ./helpers/simple_run.sh

@@ -31,7 +31,7 @@ jobs:
         run: >
           ./helpers/control_rig.sh power_off &&
           ./helpers/control_rig.sh sdmux_host &&
-          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4/images/core-image-minimal-raspberrypi4.sdimg
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4/images/mender-validation-image-raspberrypi4.sdimg
     
       - name: test 32bit image
         run: ./helpers/simple_run.sh
@@ -75,7 +75,7 @@ jobs:
         run: >
           ./helpers/control_rig.sh power_off &&
           ./helpers/control_rig.sh sdmux_host &&
-          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4-64/images/core-image-minimal-raspberrypi4-64.sdimg
+          ./helpers/control_rig.sh flash /mnt/mender_gha/TheYoctoJester/meta-mender-community/scarthgap/build_validation/latest/raspberrypi4-64/images/mender-validation-image-raspberrypi4-64.sdimg
     
       - name: test 64bit image
         run: ./helpers/simple_run.sh
